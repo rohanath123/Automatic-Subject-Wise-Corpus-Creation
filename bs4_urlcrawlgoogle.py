@@ -2,9 +2,13 @@ import bs4 as bs
 import urllib.request
 import requests
 from pprint import pprint
-keyword = "elon musk"
+
+
+keyword = "Cloud Computing"
 keyword = keyword.replace(" ", "+")
-source = requests.get("https://www.google.dz/search?q=" + keyword)
+
+link = "https://www.google.dz/search?q=" + keyword
+source = requests.get(link)
 soup = bs.BeautifulSoup(source.content, 'lxml')
 
 links = soup.findAll("a")
@@ -17,24 +21,23 @@ for url in links:
 urls_clean = [str(urls[i])[0:str(urls[i]).find("&sa")] for i in range(len(urls))]
 urls_clean.pop(len(urls_clean)-1)
 
-source2 = urllib.request.urlopen(urls_clean[12]).read()
-soup = bs.BeautifulSoup(source2, 'lxml')
+print("Links Found: " + str(len(urls_clean)))
 
 content = []
+i=0
 for url in urls_clean:
+	i = i+1
 	try:
 		source2 = urllib.request.urlopen(url).read()
 		soup = bs.BeautifulSoup(source2, 'lxml')
 		for paragraph in soup.find_all('p'):
-			content.append(paragraph.text)
+			content.append(str(paragraph.text).strip())
 	except:
-		print('lol')
+		print("Link Number: "+str(i)+" is Forbidden")
 
+keyword = keyword.replace("+", " ")
+with open("C:/Users/Rohan/Desktop/Tests/"+keyword+".txt", 'a', encoding = 'utf-8') as f:
+	for para in content:
+		f.write(str(para))
 
-pprint(content)
-'''
-f = open("C:/Users/Rohan/Desktop/test.txt", 'a')
-for c in content:
-	f.write(str(c))
-f.close()
- '''
+print("Finished Writing.")
