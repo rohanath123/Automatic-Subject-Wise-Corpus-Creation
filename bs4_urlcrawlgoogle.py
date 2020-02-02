@@ -66,6 +66,7 @@ def get_content_from_keyword(keyword):
 	for url in urls_clean:
 		i = i+1
 		try:
+			print("Trying Link Number: "+str(i))
 			source2 = urllib.request.urlopen(url).read()
 			soup = bs.BeautifulSoup(source2, 'lxml')
 			for paragraph in soup.find_all('p'):
